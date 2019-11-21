@@ -1,3 +1,4 @@
+/*
 package com.example.sandra.proyecto0509;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -20,11 +21,12 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 
 @RunWith(AndroidJUnit4.class)
-public class Prueba {
+public class ConexionBaseDatosTest {
 
     private String username="conchita2@hotmail.com";
     private String password="conchita";
@@ -35,8 +37,9 @@ public class Prueba {
         DatabaseReference dbr = fbd.getReference("users");
         dbr.child(user.getUid());
 
-        assertNull(user);
-        assertNull(dbr.child(user.getUid()));
+        assertNotNull(user);
+        assertNotNull(dbr.child(user.getUid()));
 
     }
 }
+*/
