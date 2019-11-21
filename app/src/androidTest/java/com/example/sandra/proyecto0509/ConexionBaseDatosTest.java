@@ -1,4 +1,3 @@
-/*
 package com.example.sandra.proyecto0509;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -35,11 +34,10 @@ public class ConexionBaseDatosTest {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase fbd=FirebaseDatabase.getInstance();
         DatabaseReference dbr = fbd.getReference("users");
-        dbr.child(user.getUid());
+        //dbr.child(user.getUid());
 
         assertNotNull(user);
         assertNotNull(dbr.child(user.getUid()));
 
     }
 }
-*/
