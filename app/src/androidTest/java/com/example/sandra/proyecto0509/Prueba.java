@@ -33,9 +33,10 @@ public class Prueba {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase fbd=FirebaseDatabase.getInstance();
         DatabaseReference dbr = fbd.getReference("users");
+        dbr.child(user.getUid());
 
-        assertNull(fbd);
-        assertNull(dbr);
+        assertNull(user);
+        assertNull(dbr.child(user.getUid()));
 
     }
 }
