@@ -20,7 +20,11 @@ before_install:
   - chmod +x gradlew
   - yes | sdkmanager "platforms;android-28"
 
-script: ./gradlew connectedAndroidTest
+script:
+  ./gradlew connectedAndroidTest
+  ./gradlew build connectedCheck
+  ./gradlew test
+
 
 before_script:
   - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
