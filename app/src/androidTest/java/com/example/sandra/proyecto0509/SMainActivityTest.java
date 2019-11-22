@@ -1,5 +1,6 @@
 /*
 
+
 package com.example.sandra.proyecto0509;
 
 import android.content.Intent;
@@ -26,8 +27,8 @@ import androidx.test.espresso.action.CoordinatesProvider;
 import androidx.test.espresso.action.GeneralClickAction;
 import androidx.test.espresso.action.Press;
 import androidx.test.espresso.action.Tap;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
-import androidx.test.runner.AndroidJUnit4;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -48,12 +49,6 @@ public class SMainActivityTest  {
 
     @Rule
     public ActivityTestRule<MainActivity> activityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
-
-
-*/
-/*Test que comprueba que el boton star y brillo son visibles
-     * y al hacer click realizan su funcion correspondiente*//*
-
 
 
     @Test
@@ -85,12 +80,6 @@ public class SMainActivityTest  {
             }
         };
     }
-
-*/
-/*Test que comprueba la visilibilidad de los botones mas y menos
-     * y su funcionalidad al hacer click*//*
-
-
 
 
     @Test
@@ -127,10 +116,6 @@ onView(withId(R.id.btn_empezar)).check(matches(isDisplayed()));
 
     }
 
-*/
-/*Test que comprueba que el seekbar llega al limite correspondiente*//*
-
-
 
     @Test
     public void moverSeekbar() {
@@ -158,8 +143,6 @@ onView(withId(R.id.btn_empezar)).check(matches(isDisplayed()));
         };
 
     }
-
-
     public static ViewAction clickSeekBar(final int pos) {
         return new GeneralClickAction(
                 Tap.SINGLE,
@@ -193,6 +176,7 @@ onView(withId(R.id.btn_empezar)).check(matches(isDisplayed()));
                 Press.FINGER);
     }
 }
+
 
 
 

@@ -22,8 +22,7 @@ before_install:
 
 script:
   ./gradlew connectedAndroidTest
-  ./gradlew build connectedCheck
-  ./gradlew test
+
 
 
 before_script:
