@@ -100,6 +100,7 @@ public class Resultados extends AppCompatActivity {
                     Log.d("I","caca");
                     Log.d("I",key);
                     Log.d("I",key.substring(0,2));
+
                     if(key.substring(0,2).equals("01")){
                         elementos.add("Enero " + key.substring(2,6));
                     }

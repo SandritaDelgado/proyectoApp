@@ -11,4 +11,12 @@
     <string name="nodo_discos">discos</string>
     <string name="title_activity_resultados2">Resultados2</string>
     <string name="title_activity_resultados3">Resultados3</string>
+
+    <string name="groupclass_prompt">Selecciona tu grupo</string>
+    <string-array name="groupclass_arrays">
+        <item>GRUPO A</item>
+        <item>GRUPO B</item>
+        <item>GRUPO C</item>
+        <item>GRUPO D</item>
+    </string-array>
 </resources>

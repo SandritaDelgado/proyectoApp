@@ -125,6 +125,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void handleMessage(Message msg){
             super.handleMessage(msg);
+            String recuperamos_variable_string = getIntent().getStringExtra("GRUPO2");
             DecimalFormat df1 = new DecimalFormat("####.0");
             if(msg.what == 1){
                 if(!esChart){
@@ -150,7 +151,7 @@ public class MainActivity extends AppCompatActivity
                         constraint.setBackgroundColor(Color.WHITE);
                     }
                     FirebaseDatabase fbd=FirebaseDatabase.getInstance();
-                    DatabaseReference dbr= (DatabaseReference) fbd.getReference("users").child(user.getUid()).child(fecha).child("contadores");
+                    DatabaseReference dbr= (DatabaseReference) fbd.getReference("users/grupo").child(recuperamos_variable_string).child(user.getUid()).child(fecha).child("contadores");
                     dbr.setValue(numero_contador.getText().toString());
                 }
             }
@@ -164,6 +165,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
        // FirebaseApp.initializeApp(this);
 
+        String recuperamos_variable_string = getIntent().getStringExtra("GRUPO2");
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("message");
@@ -173,8 +175,8 @@ public class MainActivity extends AppCompatActivity
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase fbd=FirebaseDatabase.getInstance();
-        DatabaseReference dbr = fbd.getReference("users");
-        dbr.child(user.getUid()).child(fecha).child("contadores").addValueEventListener(new ValueEventListener() {
+        DatabaseReference dbr = fbd.getReference("users/grupo");
+        dbr.child(recuperamos_variable_string).child(user.getUid()).child(fecha).child("contadores").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {

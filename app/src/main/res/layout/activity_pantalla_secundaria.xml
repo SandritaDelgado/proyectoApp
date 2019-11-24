@@ -7,6 +7,8 @@
     android:orientation="vertical"
     tools:context=".PantallaSecundaria">
 
+
+
     <Button
         android:id="@+id/btn_empezar"
         android:layout_width="match_parent"

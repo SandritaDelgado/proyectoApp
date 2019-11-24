@@ -11,9 +11,12 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,15 +36,18 @@ import java.util.regex.Pattern;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class CrearUsuarios extends AppCompatActivity implements View.OnClickListener {
+public class CrearUsuarios extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener{
 
     private EditText TextEmail;
     private EditText TextPassword;
     private Button btnRegistrar;
     private ProgressDialog progressDialog;
     private Button btn_registrado;
+    private Spinner lista_grupos;
 
-// y quiero acceder a esta variable desde
+    String[] groupclass = { "Elige un grupo", "Grupo A", "Grupo B", "Grupo C", "Grupo D"};
+
+    // y quiero acceder a esta variable desde
     //Declaramos un objeto firebaseAuth
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
@@ -80,15 +86,25 @@ public class CrearUsuarios extends AppCompatActivity implements View.OnClickList
         btn_registrado= (Button) findViewById(R.id.btn_yaregistrado);
         btn_registrado.setOnClickListener(this);
 
+        lista_grupos=(Spinner) findViewById(R.id.spinner);
+        lista_grupos.setOnItemSelectedListener(this);
+
+        ArrayAdapter aa = new ArrayAdapter(this,android.R.layout.simple_spinner_item,groupclass);
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        lista_grupos.setAdapter(aa);
+
+
+
         authStateListener=new FirebaseAuth.AuthStateListener() {
                     //comprobamos el inicio y el cierre de sesion
                     @Override
                     public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                         FirebaseUser user=firebaseAuth.getCurrentUser();
-
                         if(user!=null){
-                            Toast.makeText(CrearUsuarios.this,"Sesion iniciada con email " +user.getEmail(),Toast.LENGTH_LONG).show();
+                            String grupoclaseintent=lista_grupos.getSelectedItem().toString();
+                            Toast.makeText(CrearUsuarios.this,"Sesion iniciada con email " +user.getEmail() + "Grupo " + grupoclaseintent,Toast.LENGTH_LONG).show();
                             Intent intent=new Intent(CrearUsuarios.this,PantallaSecundaria.class);
+                            intent.putExtra("GRUPO",grupoclaseintent);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
                         }
@@ -132,8 +148,10 @@ public class CrearUsuarios extends AppCompatActivity implements View.OnClickList
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
+                    String grupoclaseintent=lista_grupos.getSelectedItem().toString();
                     //Toast.makeText(CrearUsuarios.this,"Ha iniciado sesion  el usuario con el email: "+ TextEmail.getText(),Toast.LENGTH_LONG).show();
-                    Intent intencion = new Intent(getApplication(), CrearUsuarios.class);
+                    Intent intencion = new Intent(getApplication(), PantallaSecundaria.class);
+                    intencion.putExtra("GRUPO",grupoclaseintent);
                     startActivity(intencion);
                 }else{
                     if (task.getException() instanceof FirebaseAuthUserCollisionException) {//si se presenta una colisión
@@ -154,12 +172,12 @@ public class CrearUsuarios extends AppCompatActivity implements View.OnClickList
         switch (view.getId()) {
 
             case R.id.btn_register:
-
-
                 String emailInicio=TextEmail.getText().toString();
                 String passwordInicio=TextPassword.getText().toString();
-                if(emailInicio.isEmpty() || passwordInicio.isEmpty()){
-                    Toast.makeText(CrearUsuarios.this,"Introduce el email y contraseña y pulsa REGISTRAR ",Toast.LENGTH_SHORT).show();
+                String grupoclase=lista_grupos.getSelectedItem().toString();
+
+                if(emailInicio.isEmpty() || passwordInicio.isEmpty() || grupoclase.isEmpty()){
+                    Toast.makeText(CrearUsuarios.this,"Introduce el email, la contraseña y el grupo y pulsa REGISTRAR ",Toast.LENGTH_SHORT).show();
                 }
                 else if(emailInicio.equals("jefeestudios33@hotmail.com")){
                     Intent intencion = new Intent(getApplication(), Pantalla_Secundaria_Jefe.class);
@@ -173,8 +191,10 @@ public class CrearUsuarios extends AppCompatActivity implements View.OnClickList
 
                 String emailSesion=TextEmail.getText().toString();
                 String passwordSesion=TextPassword.getText().toString();
-                if(emailSesion.isEmpty() || passwordSesion.isEmpty()){
-                    Toast.makeText(CrearUsuarios.this,"Introduce el email y contraseña y pulsa INICIAR SESION",Toast.LENGTH_SHORT).show();
+                String grupo=lista_grupos.getSelectedItem().toString();
+
+                if(emailSesion.isEmpty() || passwordSesion.isEmpty() || grupo.isEmpty()){
+                    Toast.makeText(CrearUsuarios.this,"Introduce el email, la contraseña y el grupo y pulsa INICIAR SESION",Toast.LENGTH_SHORT).show();
                 }
                else  if(emailSesion.equals("jefeestudios33@hotmail.com")){
                     Intent intencion = new Intent(getApplication(), Pantalla_Secundaria_Jefe.class);
@@ -197,5 +217,18 @@ public class CrearUsuarios extends AppCompatActivity implements View.OnClickList
     protected void onStop() {
         super.onStop();
         FirebaseAuth.getInstance().removeAuthStateListener(authStateListener);
+    }
+
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if(position!=0) {
+            Toast.makeText(getApplicationContext(), groupclass[position], Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }
