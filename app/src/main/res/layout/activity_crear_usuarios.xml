@@ -18,25 +18,25 @@
             android:id="@+id/ed_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Introduce EMAIL"
-            android:gravity="center"
-            android:paddingTop="30dp"
-            android:layout_marginBottom="30dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:layout_marginBottom="30dp"
+            android:gravity="center"
+            android:hint="EMAIL: example@hotmail.com"
             android:inputType="textPersonName"
+            android:paddingTop="30dp"
             android:textSize="20sp" />
 
         <EditText
             android:id="@+id/et_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:hint="Introduce CONTRASEÑA"
-            android:gravity="center"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="30dp"
+            android:gravity="center"
+            android:hint="CONTRASEÑA: 1234567"
+            android:inputType="textPassword"
             android:paddingTop="30dp"
             android:textSize="20sp" />
 

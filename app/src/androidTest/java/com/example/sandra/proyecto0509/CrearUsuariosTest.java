@@ -45,7 +45,7 @@ public class CrearUsuariosTest {
                                      .check(matches(isDisplayed()));
         onView(withId(R.id.et_password)).perform(typeText("conchita"))
                                         .check(matches(isDisplayed()));*/
-        onView(withId(R.id.ed_email)).perform(typeText("jefeestudios33@hotmail.com"))
+        onView(withId(R.id.ed_email)).perform(typeText("jefeestudios4@hotmail.com"))
                                      .check(matches(isDisplayed()));
         onView(withId(R.id.et_password)).perform(typeText("1234567"))
                                         .check(matches(isDisplayed()));

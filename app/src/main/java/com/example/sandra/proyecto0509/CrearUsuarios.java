@@ -26,8 +26,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
@@ -35,6 +38,8 @@ import java.util.regex.Pattern;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import static com.example.sandra.proyecto0509.VariablesGlobales.contador;
 
 public class CrearUsuarios extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener{
 
@@ -45,6 +50,7 @@ public class CrearUsuarios extends AppCompatActivity implements View.OnClickList
     private Button btn_registrado;
     private Spinner lista_grupos;
 
+    String grupoclaseintent = "";
     String[] groupclass = { "Elige un grupo", "Grupo A", "Grupo B", "Grupo C", "Grupo D"};
 
     // y quiero acceder a esta variable desde
@@ -82,6 +88,10 @@ public class CrearUsuarios extends AppCompatActivity implements View.OnClickList
 
 
         progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Realizando registro...");
+        progressDialog.setProgressStyle(progressDialog.STYLE_SPINNER);
+        //progressDialog.show();
+
 
         btn_registrado= (Button) findViewById(R.id.btn_yaregistrado);
         btn_registrado.setOnClickListener(this);
@@ -93,26 +103,52 @@ public class CrearUsuarios extends AppCompatActivity implements View.OnClickList
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         lista_grupos.setAdapter(aa);
 
-
-
+        progressDialog.dismiss();
         authStateListener=new FirebaseAuth.AuthStateListener() {
                     //comprobamos el inicio y el cierre de sesion
                     @Override
                     public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                         FirebaseUser user=firebaseAuth.getCurrentUser();
                         if(user!=null){
-                            String grupoclaseintent=lista_grupos.getSelectedItem().toString();
-                            Toast.makeText(CrearUsuarios.this,"Sesion iniciada con email " +user.getEmail() + "Grupo " + grupoclaseintent,Toast.LENGTH_LONG).show();
-                            Intent intent=new Intent(CrearUsuarios.this,PantallaSecundaria.class);
-                            intent.putExtra("GRUPO",grupoclaseintent);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
+                            progressDialog.show();
+                            if(lista_grupos.getSelectedItem().toString() == "Elige un grupo"){
+                                FirebaseDatabase fbd=FirebaseDatabase.getInstance();
+                                DatabaseReference dbr= (DatabaseReference) fbd.getReference("users").child(user.getUid()).child("grupo");
+                                dbr.addValueEventListener(new ValueEventListener() {
+
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.exists() && dataSnapshot.getValue().toString() != "") {
+                                            progressDialog.dismiss();
+                                            String contador = dataSnapshot.getValue().toString();
+                                            grupoclaseintent = contador;
+                                            Toast.makeText(CrearUsuarios.this,"Sesion iniciada con email " +user.getEmail() + "Grupo " + grupoclaseintent,Toast.LENGTH_LONG).show();
+                                            Intent intent=new Intent(CrearUsuarios.this,PantallaSecundaria.class);
+                                            intent.putExtra("GRUPO",grupoclaseintent);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                            startActivity(intent);
+                                        }
+                                    }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {}
+                                });
+                            } else {
+                                progressDialog.dismiss();
+                                grupoclaseintent = lista_grupos.getSelectedItem().toString();
+                                Toast.makeText(CrearUsuarios.this,"Sesion iniciada con email " +user.getEmail() + "Grupo " + grupoclaseintent,Toast.LENGTH_LONG).show();
+                                Intent intent=new Intent(CrearUsuarios.this,PantallaSecundaria.class);
+                                intent.putExtra("GRUPO",grupoclaseintent);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                            }
+
                         }
                 else{
                     Toast.makeText(CrearUsuarios.this,"Sesion cerrada",Toast.LENGTH_LONG).show();
                 }
             }
         };
+        FirebaseAuth.getInstance().addAuthStateListener(authStateListener);
     }
 
     public boolean registrar(String email, String password){
@@ -155,9 +191,9 @@ public class CrearUsuarios extends AppCompatActivity implements View.OnClickList
                     startActivity(intencion);
                 }else{
                     if (task.getException() instanceof FirebaseAuthUserCollisionException) {//si se presenta una colisión
-                        Toast.makeText(CrearUsuarios.this, "Ese usuario ya existe ", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CrearUsuarios.this, "Ese usuario ya existe en la base de datos", Toast.LENGTH_SHORT).show();
                     }
-                    Toast.makeText(CrearUsuarios.this,"No se pudo iniciar sesion ",Toast.LENGTH_LONG).show();
+                    Toast.makeText(CrearUsuarios.this,"No se pudo iniciar sesion el usuario no esta registrado ",Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -179,7 +215,7 @@ public class CrearUsuarios extends AppCompatActivity implements View.OnClickList
                 if(emailInicio.isEmpty() || passwordInicio.isEmpty() || grupoclase.isEmpty()){
                     Toast.makeText(CrearUsuarios.this,"Introduce el email, la contraseña y el grupo y pulsa REGISTRAR ",Toast.LENGTH_SHORT).show();
                 }
-                else if(emailInicio.equals("jefeestudios33@hotmail.com")){
+                else if(emailInicio.equals("jefeestudios4@hotmail.com") &&  !passwordInicio.isEmpty()){
                     Intent intencion = new Intent(getApplication(), Pantalla_Secundaria_Jefe.class);
                     startActivity(intencion);
                 }
@@ -193,12 +229,12 @@ public class CrearUsuarios extends AppCompatActivity implements View.OnClickList
                 String passwordSesion=TextPassword.getText().toString();
                 String grupo=lista_grupos.getSelectedItem().toString();
 
-                if(emailSesion.isEmpty() || passwordSesion.isEmpty() || grupo.isEmpty()){
-                    Toast.makeText(CrearUsuarios.this,"Introduce el email, la contraseña y el grupo y pulsa INICIAR SESION",Toast.LENGTH_SHORT).show();
-                }
-               else  if(emailSesion.equals("jefeestudios33@hotmail.com")){
+                if(emailSesion.equals("jefeestudios4@hotmail.com") &&  !passwordSesion.isEmpty()){
                     Intent intencion = new Intent(getApplication(), Pantalla_Secundaria_Jefe.class);
                     startActivity(intencion);
+                }
+                else if(emailSesion.isEmpty() || passwordSesion.isEmpty() || grupo.isEmpty()){
+                    Toast.makeText(CrearUsuarios.this,"Introduce el email, la contraseña y el grupo y pulsa INICIAR SESION",Toast.LENGTH_SHORT).show();
                 }
                 else {
                     iniciarsesion(emailSesion,passwordSesion);
@@ -210,12 +246,12 @@ public class CrearUsuarios extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseAuth.getInstance().addAuthStateListener(authStateListener);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        progressDialog.dismiss();
         FirebaseAuth.getInstance().removeAuthStateListener(authStateListener);
     }
 
@@ -223,7 +259,7 @@ public class CrearUsuarios extends AppCompatActivity implements View.OnClickList
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if(position!=0) {
-            Toast.makeText(getApplicationContext(), groupclass[position], Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), groupclass[position], Toast.LENGTH_SHORT).show();
         }
     }
 

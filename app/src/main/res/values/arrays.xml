@@ -3,6 +3,12 @@
     <!--Array con los valores de la cabecera de la tabla-->
     <!--Array con los valores de la cabecera de la tabla-->
     <string-array name="cabecera_tabla">
+        <item>Usuarios</item>
+        <item>Meses</item>
+        <item>Contadores Totales</item>
+    </string-array>
+
+    <string-array name="cabecera_tabla_Alumno">
         <item>Meses</item>
         <item>Contadores Totales</item>
     </string-array>

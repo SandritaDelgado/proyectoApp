@@ -137,21 +137,31 @@ public class MainActivity extends AppCompatActivity
                 maximoValor.setText(df1.format(maximodb));
                 curvaValor.setText(df1.format(contador));
                 ActualizarDatos(contador,0);
-                if(Calendar.getInstance().getTimeInMillis()-temporizador>4000) {
+                if(Calendar.getInstance().getTimeInMillis()-temporizador>5000) {
                     if (contador > umbral) {
                         //Toast.makeText(MainActivity.this, "nivel de ruido muy alto", Toast.LENGTH_SHORT).show();
                         mediaplayer.start();
+                        //da error
+                        migrabador.PararGrabacion();
+                        long temp = Calendar.getInstance().getTimeInMillis();
+                        if(Calendar.getInstance().getTimeInMillis()-temp>3000) {
+                            migrabador.EmpezarGrabar();
+                        }
                         constraint.setBackgroundColor(Color.RED);
+                        WindowManager.LayoutParams layout= getWindow().getAttributes();
+                        layout.screenBrightness=0.0F;
+                        getWindow().setAttributes(layout);
                         numero_contador.setText(String.valueOf(Integer.parseInt(numero_contador.getText().toString())+1));
-
-
+                        luz.setVisibility(View.VISIBLE);
                     }
                     temporizador=Calendar.getInstance().getTimeInMillis();
                     if(contador<umbral){
                         constraint.setBackgroundColor(Color.WHITE);
                     }
                     FirebaseDatabase fbd=FirebaseDatabase.getInstance();
-                    DatabaseReference dbr= (DatabaseReference) fbd.getReference("users/grupo").child(recuperamos_variable_string).child(user.getUid()).child(fecha).child("contadores");
+                    DatabaseReference dbr= (DatabaseReference) fbd.getReference("users").child(user.getUid()).child("grupo");
+                    dbr.setValue(recuperamos_variable_string);
+                    dbr= (DatabaseReference) fbd.getReference("users").child(user.getUid()).child(fecha).child("contadores");
                     dbr.setValue(numero_contador.getText().toString());
                 }
             }
@@ -159,11 +169,10 @@ public class MainActivity extends AppCompatActivity
     };
 
 
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-       // FirebaseApp.initializeApp(this);
+        // FirebaseApp.initializeApp(this);
 
         String recuperamos_variable_string = getIntent().getStringExtra("GRUPO2");
         // Write a message to the database
@@ -174,14 +183,14 @@ public class MainActivity extends AppCompatActivity
 
 
         user = FirebaseAuth.getInstance().getCurrentUser();
-        FirebaseDatabase fbd=FirebaseDatabase.getInstance();
-        DatabaseReference dbr = fbd.getReference("users/grupo");
-        dbr.child(recuperamos_variable_string).child(user.getUid()).child(fecha).child("contadores").addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase fbd = FirebaseDatabase.getInstance();
+        DatabaseReference dbr = fbd.getReference("users");
+        dbr.child(user.getUid()).child(fecha).child("contadores").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
 
-                    String contador=dataSnapshot.getValue().toString();
+                    String contador = dataSnapshot.getValue().toString();
                     numero_contador.setText(contador);
                 }
             }
@@ -193,25 +202,25 @@ public class MainActivity extends AppCompatActivity
         });
 
         //temporizador
-        temporizador=Calendar.getInstance().getTimeInMillis();
+        temporizador = Calendar.getInstance().getTimeInMillis();
         //Permisos necesarios para poder grabar
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO}, 1000);
         }
-        layout= (LinearLayout) findViewById(R.id.layout_DB);
-        constraint= (LinearLayout) findViewById(R.id.constraint);
+        layout = (LinearLayout) findViewById(R.id.layout_DB);
+        constraint = (LinearLayout) findViewById(R.id.constraint);
 
         mediaplayer = MediaPlayer.create(this, R.raw.music);
 
-        start=(Button)findViewById(R.id.btn_start);
+        start = (Button) findViewById(R.id.btn_start);
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // start.setVisibility(View.INVISIBLE);
-                if(barra1.getProgress()==0){
+                if (barra1.getProgress() == 0) {
                     start.setEnabled(true);
                     //Toast.makeText(MainActivity.this, "Debes fijar un nivel de decibelios ", Toast.LENGTH_LONG).show();
-                    AlertDialog.Builder seleccionDB= new AlertDialog.Builder(MainActivity.this, R.style.Theme_AppCompat_Dialog_Alert);
+                    AlertDialog.Builder seleccionDB = new AlertDialog.Builder(MainActivity.this, R.style.Theme_AppCompat_Dialog_Alert);
                     seleccionDB.setMessage("Debe seleccionar el nivel de decibelios que desea, para ello mueva la barrita");
                     seleccionDB.setNeutralButton("Aceptar", new DialogInterface.OnClickListener() {
                         @Override
@@ -219,10 +228,9 @@ public class MainActivity extends AppCompatActivity
 
                         }
                     });
-                    AlertDialog noDB=seleccionDB.create();
+                    AlertDialog noDB = seleccionDB.create();
                     noDB.show();
-                }
-                else {
+                } else {
                     //startService(new Intent(MainActivity.this, Servicio.class));
                     File file = Archivo.createFile("temp.amr");
                     if (file != null) {
@@ -273,17 +281,19 @@ public class MainActivity extends AppCompatActivity
             }
         });*/
 
-        luz= (Button) findViewById(R.id.btn_brillo);
-        luz.setOnClickListener(new View.OnClickListener() {
+
+        luz = (Button) findViewById(R.id.btn_brillo);
+        luz.setVisibility(View.INVISIBLE);
+        /*luz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 luz.setText("Subir Brillo");
                 subir_brillo();
             }
-        });
-        luz.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
+        });*/
+        //luz.setOnLongClickListener(new View.OnLongClickListener() {
+          /*@Override
             public boolean onLongClick(View v) {
                 if(((Long) System.currentTimeMillis() - tiempoenMS) >= 2000){
                     luz.setText("Bajar Brillo");
@@ -293,6 +303,23 @@ public class MainActivity extends AppCompatActivity
                 }
                 return false;
             }
+            }*/
+
+        luz.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bajar_brillo();
+            }
+            /*@Override
+            public boolean onLongClick(View v) {
+                if(((Long) System.currentTimeMillis() - tiempoenMS) >= 2000){
+                    luz.setText("Bajar Brillo");
+                    bajar_brillo();
+
+                    return true;
+                }
+                return false;
+            }*/
         });
 
 
@@ -402,12 +429,12 @@ public class MainActivity extends AppCompatActivity
         });*/
     }
 
-    private void subir_brillo(){
+    /*private void subir_brillo(){
         //Codigo que baja totalmente el brillo de la pantalla
         WindowManager.LayoutParams layout= getWindow().getAttributes();
         layout.screenBrightness=0.0F;
         getWindow().setAttributes(layout);
-    }
+    }*/
 
     private void bajar_brillo(){
         WindowManager.LayoutParams layout= getWindow().getAttributes();

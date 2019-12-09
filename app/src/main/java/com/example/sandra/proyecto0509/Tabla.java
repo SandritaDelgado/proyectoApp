@@ -23,9 +23,14 @@ public class Tabla {
     {
         this.actividad = actividad;
         this.tabla = tabla;
+        this.tabla.removeAllViews();
         rs = this.actividad.getResources();
         FILAS = COLUMNAS = 0;
         filas = new ArrayList<TableRow>();
+    }
+
+    public void borrarTabla(){
+
     }
 
     public void agregarCabecera(int recursocabecera)

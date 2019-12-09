@@ -22,7 +22,7 @@ public class Pantalla_Secundaria_Jefe extends AppCompatActivity {
         estadisticas_jefe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intencion = new Intent(getApplication(), Resultados2.class);
+                Intent intencion = new Intent(getApplication(), Resul_Jefe_Estudios.class);
                 startActivity(intencion);
             }
         });

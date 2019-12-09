@@ -3,10 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.sandra.proyecto0509">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.INTERNET" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/logo"
@@ -15,11 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Pantalla_Secundaria_Jefe"></activity>
-        <activity
-            android:name=".Resultados2"
-            android:label="@string/title_activity_resultados2"
-            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Resul_Jefe_Estudios"></activity>
+        <activity android:name=".Pantalla_Secundaria_Jefe" />
         <activity
             android:name=".RegistrarUsuarios"
             android:label="@string/title_activity_registrar_usuarios"
@@ -39,12 +32,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"/>
-        <activity
-            android:name=".PantallaSecundaria"/>
+        <activity android:name=".MainActivity" />
+        <activity android:name=".PantallaSecundaria" />
 
         <service android:name=".Servicio" />
     </application>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 </manifest>

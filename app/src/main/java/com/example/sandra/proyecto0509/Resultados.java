@@ -55,17 +55,8 @@ public class Resultados extends AppCompatActivity {
         setContentView(R.layout.activity_resultados);
         //FirebaseApp.initializeApp(this);
 
-         final Tabla tabla = new Tabla(this, (TableLayout)findViewById(R.id.tabla));
-        tabla.agregarCabecera(R.array.cabecera_tabla);
-        /*jefe=findViewById(R.id.btn_jefe);
-        jefe.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Uri uri = Uri.parse("https://console.firebase.google.com/project/ag21tfg/database/ag21tfg/data/");
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
-            }
-        });*/
+        final Tabla tabla = new Tabla(this, (TableLayout)findViewById(R.id.tabla));
+        tabla.agregarCabecera(R.array.cabecera_tabla_Alumno);
 
         FirebaseUser user= FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase fbd=FirebaseDatabase.getInstance();
@@ -73,34 +64,25 @@ public class Resultados extends AppCompatActivity {
         dbr.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-              // for(DataSnapshot datas: dataSnapshot.getChildren()){
-                    //List <DataSnapshot> aux= (List<DataSnapshot>) datas.getChildren();
-                    //Log.d("I","aqui empiezan datos");
-                    //Log.d("I",datas.getValue().toString());
-               // DataSnapshot children = null;
-                   for(DataSnapshot  children: dataSnapshot.getChildren()){
-                        Log.d("I", children.child("contadores").getValue().toString());
-                        Log.d("I", children.getKey());
-                        if(meses.containsKey(children.getKey())){
+                // for(DataSnapshot datas: dataSnapshot.getChildren()){
+                //List <DataSnapshot> aux= (List<DataSnapshot>) datas.getChildren();
+                //Log.d("I","aqui empiezan datos");
+                //Log.d("I",datas.getValue().toString());
+                // DataSnapshot children = null;
+                for(DataSnapshot  children: dataSnapshot.getChildren()){
+                    if(children.getKey().compareTo("grupo") != 0) {
+                        if (meses.containsKey(children.getKey())) {
                             meses.put(children.getKey(), meses.get(children.getKey()) + Integer.parseInt(children.child("contadores").getValue().toString()));
-                        }
-                        else{
-                            //Log.d("I", children.getValue().toString());
+                        } else {
                             meses.put(children.getKey(), Integer.parseInt(children.child("contadores").getValue().toString()));
-                        }
+                        } //el problema esta que como el usuario tiene dos hijos pro asi llamarlos el primero lo cojo bien
+                        //el problema es cuando realiza otra iteracion y coge el hijo grupo que éste no tiene ningun hijo
+                        //llamado contadores y por eso devuelve null
                     }
-            //   }
-                Log.d("I",meses.toString());
-                /*ArrayList<String> elementos=new ArrayList<String>();
-                elementos.add("Mayo 2019" );
-                elementos.add(meses.get("052019").toString());
-                tabla.agregarFilaTabla(elementos);*/
+                }
+                //   }
                 for (String key : meses.keySet()){
                     ArrayList<String> elementos=new ArrayList<String>();
-                    Log.d("I","caca");
-                    Log.d("I",key);
-                    Log.d("I",key.substring(0,2));
-
                     if(key.substring(0,2).equals("01")){
                         elementos.add("Enero " + key.substring(2,6));
                     }
@@ -145,8 +127,8 @@ public class Resultados extends AppCompatActivity {
                         default:
                             elementos.add(meses.get(key).toString());
                             tabla.agregarFilaTabla(elementos);*/
-                    }
                 }
+            }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
