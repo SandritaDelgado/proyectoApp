@@ -35,16 +35,17 @@ public class Login_jefeTest {
     @Rule
     public IntentsTestRule<Login_jefe> activityRule = new IntentsTestRule<>(Login_jefe.class);
 
-    private String username="laureano@hotmail.com";
+    private String username="jefeestudios4@hotmail.com";
     private String password="1234567890";
 
-
+    
     @Test
     public void clickLoginButton(){
+        intended(hasComponent(Login_jefe.class.getName()),times(0));
         onView(withId(R.id.ed_email)).perform(ViewActions.typeText(username), closeSoftKeyboard());
         onView(withId(R.id.et_password)).perform(ViewActions.typeText(password), closeSoftKeyboard());
         onView(withId(R.id.btn_yaregistrado)).perform(click());
-        intended(hasComponent(Resul_Jefe_Estudios.class.getName()),times(0));
+        intended(hasComponent(Resul_Jefe_Estudios.class.getName()),times(1));
 
     }
 }
