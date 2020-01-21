@@ -49,6 +49,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:truth:1.2.0'
     androidTestImplementation 'com.google.truth:truth:1.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    androidTestImplementation 'com.android.support:support-annotations:27.1.1'
 
 }
 
