@@ -11,7 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Resul_Jefe_Estudios"></activity>
+        <activity android:name=".Login_jefe"></activity>
+        <activity android:name=".Resul_Jefe_Estudios" />
         <activity android:name=".Pantalla_Secundaria_Jefe" />
         <activity
             android:name=".RegistrarUsuarios"
@@ -37,9 +38,9 @@
 
         <service android:name=".Servicio" />
     </application>
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
 </manifest>

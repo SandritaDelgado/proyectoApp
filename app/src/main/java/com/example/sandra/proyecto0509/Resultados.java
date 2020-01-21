@@ -70,7 +70,7 @@ public class Resultados extends AppCompatActivity {
                 //Log.d("I",datas.getValue().toString());
                 // DataSnapshot children = null;
                 for(DataSnapshot  children: dataSnapshot.getChildren()){
-                    if(children.getKey().compareTo("grupo") != 0) {
+                    if((children.getKey().compareTo("grupo") != 0) && children.getKey().compareTo("nombre") != 0) {
                         if (meses.containsKey(children.getKey())) {
                             meses.put(children.getKey(), meses.get(children.getKey()) + Integer.parseInt(children.child("contadores").getValue().toString()));
                         } else {

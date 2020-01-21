@@ -27,7 +27,7 @@ public class Pantalla_Secundaria_Jefe extends AppCompatActivity {
             }
         });
 
-        web_base_datos= (Button) findViewById(R.id.btn_basedatos_jefe);
+       /* web_base_datos= (Button) findViewById(R.id.btn_basedatos_jefe);
         web_base_datos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -35,7 +35,7 @@ public class Pantalla_Secundaria_Jefe extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
             }
-        });
+        });*/
 
     }
 }

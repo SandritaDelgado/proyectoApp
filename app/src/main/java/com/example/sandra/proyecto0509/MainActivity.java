@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity
         public void handleMessage(Message msg){
             super.handleMessage(msg);
             String recuperamos_variable_string = getIntent().getStringExtra("GRUPO2");
+            String recuperamos_variable_nombre = getIntent().getStringExtra("NOMBRE2");
             DecimalFormat df1 = new DecimalFormat("####.0");
             if(msg.what == 1){
                 if(!esChart){
@@ -142,11 +143,11 @@ public class MainActivity extends AppCompatActivity
                         //Toast.makeText(MainActivity.this, "nivel de ruido muy alto", Toast.LENGTH_SHORT).show();
                         mediaplayer.start();
                         //da error
-                        migrabador.PararGrabacion();
-                        long temp = Calendar.getInstance().getTimeInMillis();
+                        //migrabador.PararGrabacion();
+                        /*long temp = Calendar.getInstance().getTimeInMillis();
                         if(Calendar.getInstance().getTimeInMillis()-temp>3000) {
                             migrabador.EmpezarGrabar();
-                        }
+                        }*/
                         constraint.setBackgroundColor(Color.RED);
                         WindowManager.LayoutParams layout= getWindow().getAttributes();
                         layout.screenBrightness=0.0F;
@@ -161,6 +162,8 @@ public class MainActivity extends AppCompatActivity
                     FirebaseDatabase fbd=FirebaseDatabase.getInstance();
                     DatabaseReference dbr= (DatabaseReference) fbd.getReference("users").child(user.getUid()).child("grupo");
                     dbr.setValue(recuperamos_variable_string);
+                    dbr=(DatabaseReference) fbd.getReference("users").child(user.getUid()).child("nombre");
+                    dbr.setValue(recuperamos_variable_nombre);
                     dbr= (DatabaseReference) fbd.getReference("users").child(user.getUid()).child(fecha).child("contadores");
                     dbr.setValue(numero_contador.getText().toString());
                 }
@@ -172,9 +175,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // FirebaseApp.initializeApp(this);
-
-        String recuperamos_variable_string = getIntent().getStringExtra("GRUPO2");
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("message");

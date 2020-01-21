@@ -67,13 +67,10 @@ public class Resul_Jefe_Estudios extends AppCompatActivity implements AdapterVie
                         //"A" es el valor que sale del spinner
                         if(datas.child("grupo").getValue().toString().compareTo(spinner.getSelectedItem().toString()) == 0){
                             for(DataSnapshot  children: datas.getChildren()){
-                                if(children.getKey().compareTo("grupo") != 0) {
+                                if((children.getKey().compareTo("grupo") != 0) && (children.getKey().compareTo("nombre") != 0)) {
                                     ArrayList<String> elementos=new ArrayList<String>();
-
-
-
-
-                                    elementos.add(datas.getKey().toString());
+                                    String nombre_usuario= datas.child("nombre").getValue().toString();
+                                    elementos.add(nombre_usuario);
                                     String key = children.getKey();
                                     if(key.substring(0,2).equals("01")){
                                         elementos.add("Enero " + key.substring(2,6));

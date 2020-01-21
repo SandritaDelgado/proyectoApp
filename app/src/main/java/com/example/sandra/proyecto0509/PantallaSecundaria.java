@@ -67,8 +67,10 @@ public class PantallaSecundaria extends AppCompatActivity
                 BaseDatos user=new BaseDatos(userE);
                 databaseReference.child(tv2.getText().toString()).child(userE).setValue(user);*/
                 String recuperamos_variable_string = getIntent().getStringExtra("GRUPO");
+                String recuperamos_varialbe_nombre = getIntent().getStringExtra("NOMBRE");
                 Intent intent=new Intent(PantallaSecundaria.this, MainActivity.class);
                 intent.putExtra("GRUPO2", recuperamos_variable_string);
+                intent.putExtra("NOMBRE2",recuperamos_varialbe_nombre);
                 startActivity(intent);
             }
         });
