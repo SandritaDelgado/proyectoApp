@@ -38,9 +38,9 @@ dependencies {
     implementation 'com.github.neopixl:PixlUI:v1.1.0'
     implementation 'org.jetbrains:annotations-java5:15.0'
     implementation 'com.android.volley:volley:1.1.0'
-    implementation 'com.google.firebase:firebase-core:17.2.2'
-    implementation 'com.google.firebase:firebase-database:19.2.0'
-    implementation 'com.google.firebase:firebase-auth:19.2.0'
+    implementation 'com.google.firebase:firebase-core:17.2.0'
+    implementation 'com.google.firebase:firebase-database:19.1.0'
+    implementation 'com.google.firebase:firebase-auth:19.0.0'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
@@ -50,6 +50,7 @@ dependencies {
     androidTestImplementation 'com.google.truth:truth:1.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.collection:collection:1.1.0'
+    implementation 'androidx.fragment:fragment:1.1.0'
 
 }
 
