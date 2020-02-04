@@ -16,10 +16,12 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -69,6 +71,7 @@ public class MainActivity extends AppCompatActivity
     Button start;
     Button stop;
     Button pause;
+    Switch brillo;
 
     float umbral=-1;
     LinearLayout layout,constraint;
@@ -138,22 +141,33 @@ public class MainActivity extends AppCompatActivity
                 maximoValor.setText(df1.format(maximodb));
                 curvaValor.setText(df1.format(contador));
                 ActualizarDatos(contador,0);
-                if(Calendar.getInstance().getTimeInMillis()-temporizador>5000) {
+                if(Calendar.getInstance().getTimeInMillis()-temporizador>6000) {
                     if (contador > umbral) {
                         //Toast.makeText(MainActivity.this, "nivel de ruido muy alto", Toast.LENGTH_SHORT).show();
                         mediaplayer.start();
                         //da error
                         //migrabador.PararGrabacion();
-                        /*long temp = Calendar.getInstance().getTimeInMillis();
-                        if(Calendar.getInstance().getTimeInMillis()-temp>3000) {
-                            migrabador.EmpezarGrabar();
+
+                        /*hilo=false;
+
+                        long temp = Calendar.getInstance().getTimeInMillis();
+                        if(Calendar.getInstance().getTimeInMillis()-temporizador>5000) {
+
+                            //hilo=true;
+                            refresh=true;
+                            VariablesGlobales.minimodb=100;
+                            VariablesGlobales.contador=0;
+                            VariablesGlobales.ultimovalor=0;
+                            VariablesGlobales.maximodb=0;
+                            InicializamosGrafico();
+
                         }*/
                         constraint.setBackgroundColor(Color.RED);
-                        WindowManager.LayoutParams layout= getWindow().getAttributes();
+                        /*WindowManager.LayoutParams layout= getWindow().getAttributes();
                         layout.screenBrightness=0.0F;
-                        getWindow().setAttributes(layout);
+                        getWindow().setAttributes(layout);*/
                         numero_contador.setText(String.valueOf(Integer.parseInt(numero_contador.getText().toString())+1));
-                        luz.setVisibility(View.VISIBLE);
+                        //luz.setVisibility(View.VISIBLE);
                     }
                     temporizador=Calendar.getInstance().getTimeInMillis();
                     if(contador<umbral){
@@ -248,6 +262,25 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        brillo=(Switch)findViewById(R.id.switch1);
+        brillo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    WindowManager.LayoutParams layout= getWindow().getAttributes();
+                    layout.screenBrightness=0.0F;
+                    getWindow().setAttributes(layout);
+                    brillo.setText("Brillo OFF");
+                }
+                else{
+                    WindowManager.LayoutParams layout= getWindow().getAttributes();
+                    layout.screenBrightness=1.0F;
+                    getWindow().setAttributes(layout);
+                    brillo.setText("Brillo ON");
+                }
+            }
+        });
+
         // pause=findViewById(R.id.Pause);
         //pause.setVisibility(View.INVISIBLE);
         /*pause.setOnClickListener(new View.OnClickListener() {
@@ -282,8 +315,8 @@ public class MainActivity extends AppCompatActivity
         });*/
 
 
-        luz = (Button) findViewById(R.id.btn_brillo);
-        luz.setVisibility(View.INVISIBLE);
+        //luz = (Button) findViewById(R.id.btn_brillo);
+        //luz.setVisibility(View.INVISIBLE);
         /*luz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -305,12 +338,12 @@ public class MainActivity extends AppCompatActivity
             }
             }*/
 
-        luz.setOnClickListener(new View.OnClickListener() {
+        /*luz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 bajar_brillo();
             }
-            /*@Override
+            *//*@Override
             public boolean onLongClick(View v) {
                 if(((Long) System.currentTimeMillis() - tiempoenMS) >= 2000){
                     luz.setText("Bajar Brillo");
@@ -319,8 +352,8 @@ public class MainActivity extends AppCompatActivity
                     return true;
                 }
                 return false;
-            }*/
-        });
+            }*//*
+        });*/
 
 
         //Asignamos el seekbar al layout
